@@ -5,9 +5,9 @@ var requests = require('requests');
 const homeFile = fs.readFileSync("home.html", "UTF-8");
 
 const replace = (tempVal, orgVal) => {
-    let temperature = tempVal.replace("{%tempVal%}", orgVal.main.temp);
-    temperature = temperature.replace("{%tempMin%}", orgVal.main.temp_min);
-    temperature = temperature.replace("{%tempMax%}", orgVal.main.temp_max);
+    let temperature = tempVal.replace("{%tempVal%}", (orgVal.main.temp - 273.15).toFixed(2));
+    temperature = temperature.replace("{%tempMin%}", (orgVal.main.temp_min-273.15).toFixed(2));
+    temperature = temperature.replace("{%tempMax%}", (orgVal.main.temp_max-273.15).toFixed(2));
     temperature = temperature.replace("{%city%}", orgVal.name);
     temperature = temperature.replace("{%country%}", orgVal.sys.country);
     temperature = temperature.replace("{%tempStatus%}", orgVal.weather[0].main);
@@ -16,7 +16,7 @@ const replace = (tempVal, orgVal) => {
 }
 const server = http.createServer((req, res) => {
     if (req.url === '/') {
-        requests("https://api.openweathermap.org/data/2.5/weather?q=Mumbai&appid=686c7ea2a08920a82b4eb0e2194fc57d")
+        requests("https://api.openweathermap.org/data/2.5/weather?q=Dhule&appid=686c7ea2a08920a82b4eb0e2194fc57d")
             .on('data', (chunk) => {
                 const objData = JSON.parse(chunk);
                 const arrData = [objData]
